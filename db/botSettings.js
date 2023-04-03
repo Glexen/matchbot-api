@@ -1,6 +1,6 @@
 const sequelize = require('./db.js').sequelize;
 const DataTypes = require('./db.js').DataTypes;
-
+// model of BotSettings
 const botSettings = sequelize.define('botSettings', {
 id:{
     type: DataTypes.INTEGER,
@@ -14,9 +14,5 @@ botToken:{
 emojies:{
     type: DataTypes.JSON,
 }
-}, {
-
-})
-
-// botSettings.sync()
+}, {})
 module.exports = botSettings
