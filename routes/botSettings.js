@@ -5,7 +5,6 @@ const router = express.Router()
 module.exports = router;
 // reset endpoint, use only in testing
 router.get('/start', async (req, res) => {
-    console.log('start')
     await botSettings.destroy({where: {}})
     let bot = await botSettings.build({'id': 1,
                     'botToken': 'Token', 
@@ -19,7 +18,6 @@ router.get('/start', async (req, res) => {
 })
 // update data endpoint
 router.put('/change', async (req, res) => {
-    console.log('good')
     let bot = await botSettings.findByPk(1)
     bot.botToken = req.body.botToken;
     bot.emojies = {'like':req.body.like,
