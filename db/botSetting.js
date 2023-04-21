@@ -1,29 +1,24 @@
 const sequelize = require("./db.js").sequelize;
 const DataTypes = require("./db.js").DataTypes;
 
-// Model of languageProfile
-const languageProfile = sequelize.define(
-  "languageProfile",
+// model of BotSetting
+const botSetting = sequelize.define(
+  "botSettings",
   {
     id: {
       type: DataTypes.INTEGER,
-      autoIncrement: true,
       unique: true,
       allowNull: false,
       primaryKey: true,
     },
-    name: {
+    botToken: {
       type: DataTypes.STRING,
-      unique: true,
     },
-    helloMessage: {
-      type: DataTypes.TEXT,
-    },
-    buttonNames: {
+    emojies: {
       type: DataTypes.JSON,
     },
   },
   {}
 );
 
-module.exports = languageProfile;
+module.exports = botSetting;
