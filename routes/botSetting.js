@@ -38,5 +38,5 @@ router.put("/update", async (req, res) => {
 // get data endpoint
 router.get("/get", async (req, res) => {
   const setting = await botSetting.findByPk(1);
-  res.send(JSON.stringify(bot, null, 2));
+  res.send(JSON.stringify(setting, null, 2));
 });
