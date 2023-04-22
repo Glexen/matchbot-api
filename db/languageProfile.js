@@ -1,5 +1,5 @@
-const sequelize = require("./db.js").sequelize;
-const DataTypes = require("./db.js").DataTypes;
+const sequelize = require("./db.js").sequelize
+const DataTypes = require("./db.js").DataTypes
 
 // Model of languageProfile
 const languageProfile = sequelize.define(
@@ -24,6 +24,6 @@ const languageProfile = sequelize.define(
     },
   },
   {}
-);
+)
 
-module.exports = languageProfile;
+module.exports = languageProfile

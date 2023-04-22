@@ -1,5 +1,5 @@
-const sequelize = require("./db.js").sequelize;
-const DataTypes = require("./db.js").DataTypes;
+const sequelize = require("./db.js").sequelize
+const DataTypes = require("./db.js").DataTypes
 
 // model of BotSetting
 const botSetting = sequelize.define(
@@ -19,6 +19,6 @@ const botSetting = sequelize.define(
     },
   },
   {}
-);
+)
 
-module.exports = botSetting;
+module.exports = botSetting

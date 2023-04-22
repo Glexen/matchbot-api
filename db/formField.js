@@ -1,6 +1,6 @@
-const sequelize = require("./db.js").sequelize;
-const DataTypes = require("./db.js").DataTypes;
-const languageProfile = require("./languageProfile.js");
+const sequelize = require("./db.js").sequelize
+const DataTypes = require("./db.js").DataTypes
+const languageProfile = require("./languageProfile.js")
 
 // model of FormField
 const formField = sequelize.define(
@@ -31,10 +31,10 @@ const formField = sequelize.define(
     },
   },
   {}
-);
+)
 
-formField.belongsTo(languageProfile);
+formField.belongsTo(languageProfile)
 
-languageProfile.hasMany(formField);
+languageProfile.hasMany(formField)
 
-module.exports = formField;
+module.exports = formField

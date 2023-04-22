@@ -1,13 +1,13 @@
-const languageProfile = require("../db/languageProfile.js");
-const express = require("express");
-const router = express.Router();
+const languageProfile = require("../db/languageProfile.js")
+const express = require("express")
+const router = express.Router()
 
-module.exports = router;
+module.exports = router
 
 router.put("/update", async (req, res) => {
-  let language = await languageProfile.findByPk(req.body.id);
-  language.name = req.body.name;
-  language.helloMessage = req.body.helloMessage;
+  let language = await languageProfile.findByPk(req.body.id)
+  language.name = req.body.name
+  language.helloMessage = req.body.helloMessage
   language.buttonNames = {
     accountSettings: req.body.accountSettings,
     menu: req.body.menu,
@@ -20,10 +20,20 @@ router.put("/update", async (req, res) => {
     deactivate: req.body.deactivate,
     yes: req.body.yes,
     no: req.body.no,
-  };
-  await language.save();
-  res.send(200);
-});
+  }
+  await language.save()
+  res.send(200)
+})
+
+router.put("/updateButtonName/:buttonName", async (req, res) => {
+  console.log(req.body)
+  const language = await languageProfile.findByPk(req.body.id)
+  const buttonNames = JSON.parse(JSON.stringify(language.buttonNames))
+  buttonNames[req.params.buttonName] = req.body[req.params.buttonName]
+  language.buttonNames = buttonNames
+  await language.save()
+  res.sendStatus(200)
+})
 
 router.post("/create", async (req, res) => {
   let language = await languageProfile.build({
@@ -40,17 +50,17 @@ router.post("/create", async (req, res) => {
       yes: "Yes",
       no: "No",
     },
-  });
-  language.save();
-  res.send(200);
-});
+  })
+  language.save()
+  res.send(200)
+})
 
 router.get("/all", async (req, res) => {
-  let languages = await languageProfile.findAll();
-  res.send(JSON.stringify(languages, null, 2));
-});
+  let languages = await languageProfile.findAll()
+  res.send(JSON.stringify(languages, null, 2))
+})
 
 router.get("/one/:pk", async (req, res) => {
-  let language = await languageProfile.findByPk(req.params.pk);
-  res.send(JSON.stringify(language, null, 2));
-});
+  let language = await languageProfile.findByPk(req.params.pk)
+  res.send(JSON.stringify(language, null, 2))
+})
