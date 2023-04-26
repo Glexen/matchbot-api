@@ -1,6 +1,10 @@
 const express = require("express")
 const botSetting = require("../db/botSetting.js")
 const router = express.Router()
+require('dotenv').config();
+
+const botSettingPk = process.env.BOTSETTING_PK;
+
 
 module.exports = router
 
@@ -23,7 +27,7 @@ router.get("/start", async (req, res) => {
 
 // update data endpoint
 router.put("/update", async (req, res) => {
-  let setting = await botSetting.findByPk(1)
+  let setting = await botSetting.findByPk(botSettingPk)
   setting.botToken = req.body.botToken
   setting.emojies = {
     like: req.body.like,
@@ -36,7 +40,7 @@ router.put("/update", async (req, res) => {
 })
 
 router.put("/updateEmojie/:emojieName", async (req, res) => {
-  const setting = await botSetting.findByPk(1)
+  const setting = await botSetting.findByPk(botSettingPk)
   const emojies = JSON.parse(JSON.stringify(setting.emojies))
   emojies[req.params.emojieName] = req.body[req.params.emojieName]
   setting.emojies = emojies
@@ -45,7 +49,7 @@ router.put("/updateEmojie/:emojieName", async (req, res) => {
 })
 
 router.put("/updateBotToken", async (req, res) => {
-  const setting = await botSetting.findByPk(1)
+  const setting = await botSetting.findByPk(botSettingPk)
   setting.botToken = req.body.botToken
   await setting.save()
   res.send(200)
@@ -53,12 +57,12 @@ router.put("/updateBotToken", async (req, res) => {
 
 // get data endpoint
 router.get("/get", async (req, res) => {
-  const setting = await botSetting.findByPk(1)
+  const setting = await botSetting.findByPk(botSettingPk)
   res.send(JSON.stringify(setting, null, 2))
 })
 
 router.get("/getBotToken", async (req, res) => {
-  const setting = await botSetting.findByPk(1)
+  const setting = await botSetting.findByPk(botSettingPk)
   console.log(1)
   res.send(JSON.stringify(setting.botToken))
 })
