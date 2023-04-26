@@ -26,14 +26,21 @@ router.put("/update", async (req, res) => {
 })
 
 router.put("/updateButtonName/:buttonName", async (req, res) => {
-  console.log(req.body)
-  const language = await languageProfile.findByPk(req.body.id)
+  const language = await languageProfile.findByPk(req.body.languageProfileId)
   const buttonNames = JSON.parse(JSON.stringify(language.buttonNames))
   buttonNames[req.params.buttonName] = req.body[req.params.buttonName]
   language.buttonNames = buttonNames
   await language.save()
   res.sendStatus(200)
 })
+
+router.put("/updateHelloMessage", async (req, res) => {
+  const language = await languageProfile.findByPk(req.body.languageProfileId)
+  language.helloMessage = req.body.helloMessage
+  await language.save()
+  res.sendStatus(200)
+})
+
 
 router.post("/create", async (req, res) => {
   let language = await languageProfile.build({
@@ -63,4 +70,9 @@ router.get("/all", async (req, res) => {
 router.get("/one/:pk", async (req, res) => {
   let language = await languageProfile.findByPk(req.params.pk)
   res.send(JSON.stringify(language, null, 2))
+})
+
+router.get("/getHelloMessage/:pk", async (req, res) => {
+  const language = await languageProfile.findByPk(req.params.pk)
+  res.send(JSON.stringify(language.helloMessage))
 })
