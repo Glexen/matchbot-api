@@ -4,7 +4,7 @@ const router = express.Router()
 
 module.exports = router
 
-router.put("/update", async (req, res) => {
+router.put("", async (req, res) => {
   let language = await languageProfile.findByPk(req.body.id)
   language.name = req.body.name
   language.helloMessage = req.body.helloMessage
@@ -25,7 +25,7 @@ router.put("/update", async (req, res) => {
   res.send(200)
 })
 
-router.put("/updateButtonName/:buttonName", async (req, res) => {
+router.put("/buttonName/:buttonName", async (req, res) => {
   const language = await languageProfile.findByPk(req.body.languageProfileId)
   const buttonNames = JSON.parse(JSON.stringify(language.buttonNames))
   buttonNames[req.params.buttonName] = req.body[req.params.buttonName]
@@ -34,15 +34,15 @@ router.put("/updateButtonName/:buttonName", async (req, res) => {
   res.sendStatus(200)
 })
 
-router.put("/updateHelloMessage", async (req, res) => {
-  const language = await languageProfile.findByPk(req.body.languageProfileId)
+router.put("/helloMessage/:pk", async (req, res) => {
+  const language = await languageProfile.findByPk(req.params.pk)
   language.helloMessage = req.body.helloMessage
   await language.save()
   res.sendStatus(200)
 })
 
 
-router.post("/create", async (req, res) => {
+router.post("", async (req, res) => {
   let language = await languageProfile.build({
     name: req.body.name,
     helloMessage: "Hello, I`m bot",
@@ -62,17 +62,17 @@ router.post("/create", async (req, res) => {
   res.send(200)
 })
 
-router.get("/all", async (req, res) => {
+router.get("", async (req, res) => {
   let languages = await languageProfile.findAll()
   res.send(JSON.stringify(languages, null, 2))
 })
 
-router.get("/one/:pk", async (req, res) => {
+router.get("/:pk", async (req, res) => {
   let language = await languageProfile.findByPk(req.params.pk)
   res.send(JSON.stringify(language, null, 2))
 })
 
-router.get("/getHelloMessage/:pk", async (req, res) => {
+router.get("/helloMessage/:pk", async (req, res) => {
   const language = await languageProfile.findByPk(req.params.pk)
   res.send(JSON.stringify(language.helloMessage))
 })
