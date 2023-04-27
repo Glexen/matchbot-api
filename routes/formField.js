@@ -5,19 +5,9 @@ const router = express.Router()
 
 module.exports = router
 
-router.post("", async (req, res) => {
-  let field = await formField.build({
-    question: req.body.question,
-    isOptional: req.body.isOptional,
-    nameField: req.body.nameField,
-    languageProfileId: req.body.languageProfileId,
-  })
-  field.save()
-  res.send(200)
-})
 
-router.get("/:languageId", async (req, res) => {
-  let language = await languageProfile.findByPk(req.params.languageId, {
+router.get("/:pk", async (req, res) => {
+  let language = await languageProfile.findByPk(req.params.pk, {
     include: formField,
   })
   let result = []
@@ -38,7 +28,7 @@ router.post("", async (req, res) => {
   res.send(200)
 })
 
-router.put("", async (req, res) => {
+router.put("/:pk", async (req, res) => {
   let fields = await formField.findAll()
   for (let i = 0; i < fields.length; i++) {
     fields[i].question = req.body[`question${fields[i].id}`]
@@ -50,8 +40,8 @@ router.put("", async (req, res) => {
   res.send(200)
 })
 
-router.delete("/:id", async function (req, res) {
-  let field = await formField.findByPk(req.params.id)
+router.delete("/:pk", async function (req, res) {
+  let field = await formField.findByPk(req.params.pk)
   field.destroy()
   res.send(200)
 })
