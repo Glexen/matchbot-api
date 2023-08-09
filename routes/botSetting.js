@@ -47,6 +47,10 @@ router.get("", async (req, res) => {
 
 router.get("/botToken", async (req, res) => {
   const setting = await botSetting.findByPk(botSettingPk)
-  console.log(1)
   res.send(JSON.stringify(setting.botToken))
+})
+
+router.get("/emojies", async (req, res) => {
+  const setting = await botSetting.findByPk(botSettingPk)
+  res.send(JSON.stringify(setting.emojies))
 })

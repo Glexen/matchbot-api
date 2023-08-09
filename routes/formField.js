@@ -17,6 +17,11 @@ router.get("/:pk", async (req, res) => {
   res.send(JSON.stringify(result, null, 2))
 })
 
+router.get("/get/:pk", async (req, res) => {
+  const field = await formField.findByPk(req.params.pk)
+  res.send(JSON.stringify(field, null, 2))
+})
+
 router.post("", async (req, res) => {
   let field = await formField.build({
     question: "",
