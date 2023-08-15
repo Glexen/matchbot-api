@@ -1,99 +1,43 @@
-const user = require("../db/user.js")
+const {User, FormData} = require("../db/user.js")
 const express = require("express")
 const router = express.Router()
-const languageProfile = require("../db/languageProfile.js")
+const {languageProfile, UiElements} = require("../db/languageProfile.js")
 const { sequelize } = require("../db/db.js")
+const FormField = require("../db/formField.js")
 
 module.exports = router
 
-router.post("", async (req, res) => {
-  const newUser = await user.build({
-    telegramId: req.body.telegramId,
-    form: {},
-    isActive: false,
-    languageProfileId: req.body.languageProfileId
+router.get("/:userid/formData", async (req, res) => {
+  const userId = req.params.userid
+
+  const user = await User.findByPk(userId, {
+    include: [{ model: FormData, as: "formData" }],
   })
-  newUser.save()
-  res.sendStatus(200)
+
+  res.json(user.formData)
 })
 
-router.get("/random/:telegramId", async (req, res) => {
-  const allUsers = await user.findAll();
-  const { telegramId } = req.params;
+router.get("/:userid/languageProfiles", async (req, res) => {
+  const userId = req.params.userid
 
-  const filteredUsers = allUsers.filter(user => user.telegramId !== telegramId && user.isActive);
-  const randomUser = filteredUsers[Math.floor(Math.random() * filteredUsers.length)];
-
-  if (randomUser) {
-    res.send(JSON.stringify(randomUser, null, 2));
-  } else {
-    res.sendStatus(404); // No random user found matching the condition
-  }
-});
-
-
-router.get("", async (req, res) => {
-  const users = await user.findAll()
-  res.send(JSON.stringify(users, null, 2))
+  const user = await User.findByPk(userId, {
+    include: [{ model: languageProfile, as: "languageProfile" }],
+  })
+  res.json(user.languageProfile)
 })
 
-router.get("/:telegramId", async (req, res) => {
-  const findUser = await user.findOne({
-    where: {
-      telegramId: req.params.telegramId
-    }
-  });
-  if (findUser){
-    res.send(JSON.stringify(findUser, null, 2))
-  }else{
-    res.sendStatus(404)
-  }
+router.post("/:userid/formFields/:formFieldsId/formData", async (req, res) => {
+  const userId = req.params.userid
+  const formFieldId = req.params.formFieldsId
+
+  const user = await User.findByPk(userId)
+  const formField = await FormField.findByPk(formFieldId)
+
+  const newFormData = await FormData.create({
+    value: req.body.value,
+    formField_id: formFieldId,
+    user_id: userId,
+  })
+
+  res.status(201).json(newFormData)
 })
-
-router.put("/languageProfile/:pk", async (req, res) => {
-  const findUser = await user.findByPk(req.params.pk)
-  findUser.languageProfileId = req.body.languageProfileId
-  findUser.save()
-  res.sendStatus(200)
-})
-
-router.put("/isActive/:telegramId", async (req, res) => {
-  const findUser = await user.findOne({
-    where: {
-    telegramId: req.params.telegramId
-  }})
-  findUser.isActive = req.body.isActive
-  findUser.save()
-  res.sendStatus(200)
-})
-
-router.put("/form/:telegramId", async (req, res) => {
-  const findUser = await user.findOne({
-    where: {
-    telegramId: req.params.telegramId
-  }})
-  findUser.form = req.body.form
-  findUser.save()
-  res.sendStatus(200)
-})
-
-router.get("/languageProfile/:telegramId", async (req, res) => {
-  const findUser = await user.findOne({ where: {
-    telegramId: req.params.telegramId
-  } })
-  const languageProfileFindId = findUser.languageProfileId
-  const languageProfileFind = await languageProfile.findByPk(languageProfileFindId)
-  res.send(JSON.stringify(languageProfileFind, null, 2))
-})
-
-
-
-
-router.delete("/:telegramId", async (req, res) => {
-  const findUser = await user.findOne({ where: {
-    telegramId: req.params.telegramId} })
-  findUser.destroy()
-  res.sendStatus(200)
-})
-
-

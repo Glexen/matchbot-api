@@ -1,9 +1,29 @@
 const sequelize = require("./db.js").sequelize
 const DataTypes = require("./db.js").DataTypes
 
-// model of BotSetting
-const botSetting = sequelize.define(
-  "botSettings",
+const interactions = sequelize.define("interactions", {
+  id: {
+    type: DataTypes.INTEGER,
+    unique: true,
+    allowNull: false,
+    primaryKey: true,
+  },
+  like: {
+    type: DataTypes.STRING,
+  },
+  dislike: {
+    type: DataTypes.STRING,
+  },
+  likeMessage: {
+    type: DataTypes.STRING,
+  },
+  report: {
+    type: DataTypes.STRING,
+  },
+})
+
+const bots = sequelize.define(
+  "bots",
   {
     id: {
       type: DataTypes.INTEGER,
@@ -14,11 +34,14 @@ const botSetting = sequelize.define(
     botToken: {
       type: DataTypes.STRING,
     },
-    emojies: {
-      type: DataTypes.JSON,
+    interactionsId: {
+      type: DataTypes.INTEGER,
     },
   },
   {}
 )
 
-module.exports = botSetting
+interactions.hasOne(bots, { foreignKey: "interactionsId" })
+bots.belongsTo(interactions, { foreignKey: "interactionsId" })
+
+module.exports = { bots: bots, interactions: interactions }

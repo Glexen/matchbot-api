@@ -1,36 +1,44 @@
+const { DataTypes } = require("sequelize")
 const sequelize = require("./db.js").sequelize
-const DataTypes = require("./db.js").DataTypes
-const languageProfile = require("./languageProfile.js")
+const {languageProfile, UiElements} = require("./languageProfile.js")
+const Bot = require("./botSetting.js").bots
+const FormField = require("./formField.js")
 
-const user = sequelize.define(
-  "user",
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      unique: true,
-      allowNull: false,
-      primaryKey: true,
-    },
-    telegramId: {
-      type: DataTypes.STRING,
-      unique: true,
-    },
-    form: {
-      type: DataTypes.JSON,
-    },
-    isActive: {
-      type: DataTypes.BOOLEAN,
-    },
-    languageProfileId: {
-      type: DataTypes.INTEGER,
-    },
+const User = sequelize.define("user", {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    unique: true,
+    allowNull: false,
+    primaryKey: true,
   },
-  {}
-)
+  telegramId: {
+    type: DataTypes.STRING,
+    unique: true,
+  },
+  botsId: {
+    type: DataTypes.INTEGER,
+  },
+  isActive: {
+    type: DataTypes.BOOLEAN,
+  },
+  languageProfileId: {
+    type: DataTypes.INTEGER,
+  },
+}, {})
 
-user.belongsTo(languageProfile)
+User.belongsTo(languageProfile, { foreignKey: "languageProfileId", as: "languageProfile" })
+User.belongsTo(Bot, { foreignKey: "botsId", as: "bot" })
 
-languageProfile.hasMany(user)
+const FormData = sequelize.define("formData", {
+  value: {
+    type: DataTypes.STRING,
+  },
+}, {})
 
-module.exports = user
+
+FormData.belongsTo(FormField, { foreignKey: "formField_id", as: "formField" })
+FormData.belongsTo(User, { foreignKey: "user_id", as: "user" })
+
+
+module.exports = {User: User, FormData: FormData}

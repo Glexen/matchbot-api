@@ -1,6 +1,6 @@
 const sequelize = require("./db.js").sequelize
 const DataTypes = require("./db.js").DataTypes
-const languageProfile = require("./languageProfile.js")
+const {languageProfile, UiElements} = require("./languageProfile.js")
 
 // model of FormField
 const formField = sequelize.define(
